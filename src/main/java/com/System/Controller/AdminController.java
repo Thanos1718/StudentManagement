@@ -22,7 +22,7 @@ import com.System.Entities.Student;
 import com.System.Service.StudentImpl;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin(origins="http://localhost:4200",allowCredentials = "true")
 @RequestMapping("/admin/")
 public class AdminController {
 	
@@ -68,7 +68,7 @@ public class AdminController {
 	}
 	
 	
-	public AdminController() {
+	public AdminController() { 
 		// TODO Auto-generated constructor stub
 	}
 

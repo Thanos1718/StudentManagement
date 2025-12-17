@@ -17,5 +17,4 @@ public interface CourseRegistrationRepo extends JpaRepository<CourseRegistration
 	Set<CourseRegistration> getcourseIDS(@Param("studentId")Long id);
 	
 	Optional<CourseRegistration> findByStudentAndCourse(Student student, Course course);
-	
 }

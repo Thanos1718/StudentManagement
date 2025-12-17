@@ -68,7 +68,7 @@ public class JwtService {
         return token;
 	}
 	
-	private SecretKey getSignKey() {
+	private SecretKey getSignKey() { 
 		byte[] keyBytes=Decoders.BASE64URL.decode(Secret_Key);
 		return Keys.hmacShaKeyFor(keyBytes);
 	}

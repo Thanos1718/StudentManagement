@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,12 +32,13 @@ import com.System.DTOS.UserDTO;
 import com.System.Entities.Student;
 import com.System.Entities.User;
 import com.System.Enum.UserRole;
+import com.System.Exceptions.UnidentifiedUserException;
 import com.System.Service.StudentImpl;
 
 import lombok.extern.slf4j.XSlf4j;
 
 @RestController
-@CrossOrigin(origins="*")
+@CrossOrigin(origins="http://localhost:4200",allowCredentials = "true")
 @XSlf4j
 @RequestMapping("/student/")
 public class StudentController {
@@ -43,14 +46,15 @@ public class StudentController {
 	@Autowired 
 	 StudentImpl service;
 	
+	
+	
 	@Autowired
 	private final PasswordEncoder passwordEncoder;
 
 
 	
 private static final Logger logger=LoggerFactory.getLogger(StudentController.class);
-	
-	
+
 	
 @PostMapping("/addStudent")
 public ResponseEntity<Map<String,String>> addStudent(@RequestBody UserDTO dto) {
@@ -98,17 +102,24 @@ public ResponseEntity<Map<String,String>> addStudent(@RequestBody UserDTO dto) {
 		
 	}
 	
-	@GetMapping("getstudentCourses/{email}")
-	public ResponseEntity<List<RegisteredCourseDTO>> getCourses(@PathVariable("email") String email)
+	@GetMapping("getstudentCourses")
+	public ResponseEntity<List<RegisteredCourseDTO>> getCourses()
 	{
+		Authentication auth=SecurityContextHolder.getContext().getAuthentication();
+		String email=auth.getName();
+		logger.info("mail extracted{}",email);
 		List<RegisteredCourseDTO> courseDetails=service.getcourses(email);
 			return new ResponseEntity<List<RegisteredCourseDTO>>(courseDetails,HttpStatus.OK);	
 	}
 	
 	@GetMapping("getStudent/{email}")
-	public ResponseEntity<StudentDTO> getDetails(@PathVariable("email") String email)
+	public ResponseEntity<StudentDTO> getDetails(@PathVariable("email") String email) throws UnidentifiedUserException
 	{
+		Authentication auth=SecurityContextHolder.getContext().getAuthentication();
+		//String email1=auth.getName();
 		
+		if(!auth.getName().equals(email))
+			throw new UnidentifiedUserException( "Different User than token requested.");
 		System.out.println("Get Student");
 		 StudentDTO dto =service.getStudentData(email);
 		 return new ResponseEntity<StudentDTO>(dto,HttpStatus.OK);
@@ -130,13 +141,23 @@ public ResponseEntity<Map<String,String>> addStudent(@RequestBody UserDTO dto) {
 	
 	
 	@GetMapping("/getAllcourses")
-	public ResponseEntity<List<CourseDTO>> getCourses()
+	public ResponseEntity<List<CourseDTO>> getAllCourses()
 	{
 		List<CourseDTO> courses=new ArrayList();
 		courses.addAll(service.getAllCourses());
 		return new ResponseEntity<List<CourseDTO>>(courses,HttpStatus.OK);
 	}
-
+	
+	@GetMapping("/getAllFilteredcourses/{desc}")
+	public ResponseEntity<?> getFilteredCourses(@PathVariable("desc") String description)
+	{
+		if(description.isBlank())
+			 return new ResponseEntity<String>("Courses does not exists!",HttpStatus.NOT_FOUND);
+		List<CourseDTO> courses=new ArrayList();
+		courses.addAll(service.getAllFilteredCourses(description));
+		return new ResponseEntity<List<CourseDTO>>(courses,HttpStatus.OK);
+	}
+	
 	public StudentController(PasswordEncoder passwordEncoder) {
 		this.passwordEncoder = passwordEncoder;
 		

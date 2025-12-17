@@ -129,6 +129,7 @@ public class UserImpl  {
 		}
 	}
 	
+	// to validate token from DB received from client
 	public boolean validateToken(String token){
 		ResetToken reset= tokenRepo.findByToken(token);
 		
@@ -158,6 +159,7 @@ public class UserImpl  {
 		
 	}
 	public AuthenticationResponse authenticate(UserDTO request) {
+		
 		 authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 		System.out.println("Authentication Manager Auth Success");

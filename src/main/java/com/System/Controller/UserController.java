@@ -32,7 +32,7 @@ import com.System.Service.StudentImpl;
 import com.System.Service.UserImpl;
 
 @RestController
-@CrossOrigin(origins="*")
+@CrossOrigin(origins="http://localhost:4200",allowCredentials = "true")
 @RequestMapping("/user")
 
 public class UserController {

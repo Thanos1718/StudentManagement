@@ -12,6 +12,12 @@ import jakarta.validation.ConstraintViolationException;
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
 
+	@ExceptionHandler(UnidentifiedUserException.class)
+	public ResponseEntity<String> invalidUser(UnidentifiedUserException e)
+	{
+		return new ResponseEntity<String>(e.getMessage(),HttpStatus.FORBIDDEN);
+	}
+	
 	@ExceptionHandler(FieldEmptyException.class)
 	public ResponseEntity<String> emptyField(FieldEmptyException e)
 	{

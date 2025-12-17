@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,8 +78,12 @@ public class StudentImpl {
 			else
 				throw new ConstraintViolationException(violations2);
 		}
-		boolean ifexist=repo.findBystudentemail(student.getStudentemail())!=null || userRepo.findByuseremail(user.getUseremail())!=null;
 		
+		User u1=userRepo.findByusername(user.getUsername());
+		
+		boolean ifexist= ( (repo.findBystudentemail(student.getStudentemail())!=null || userRepo.findByuseremail(user.getUseremail())!=null ) || userRepo.findByusername(user.getUsername())!=null);
+		
+		//logger.info("ifexists by username")
 		logger.error(" get records {} {} {}",repo.findBystudentemail(student.getStudentemail()) , userRepo.findByuseremail(user.getUseremail()) ,
 		userRepo.findByusername(user.getUsername()));
 		if(ifexist)
@@ -314,6 +319,25 @@ public class StudentImpl {
 	    cr.get().setPurchased(true);
 	    coursereg.delete(cr.get());
 	    return s.get().getFirstName();
+	}
+	
+	public List<CourseDTO> getAllFilteredCourses(String description)
+	{
+		
+		List<Course> courses=courseRepo.findFiltered(description);
+		List<CourseDTO> courses_filter=new ArrayList<>();
+		
+		for(Course c:courses)
+		{
+			CourseDTO c1=new CourseDTO();
+			c1.setCourseName(c.getCourseTitle());
+			c1.setDescription(c.getCourseDescription());
+			c1.setEndDate(c.getEndDate());
+			c1.setPrice(c.getPrice());
+			c1.setStartDate(c.getStartDate());
+			courses_filter.add(c1);
+		}
+		return courses_filter;
 	}
 	
 }

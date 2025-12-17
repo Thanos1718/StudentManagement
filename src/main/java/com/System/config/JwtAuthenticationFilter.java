@@ -21,27 +21,17 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
-public class JwtAuthenticationFilter extends OncePerRequestFilter{
+public class JwtAuthenticationFilter extends OncePerRequestFilter
+{
 	
 	private final JwtService jwtservice;
 	private final UserDetailsServiceImpl userDetailsService;
-
-
-
-
-
 
 
 	public JwtAuthenticationFilter(JwtService jwtservice, UserDetailsServiceImpl userDetailsService) {
 		this.jwtservice = jwtservice;
 		this.userDetailsService = userDetailsService;
 	}
-
-
-
-
-
-
 
 	@Override
 	protected void doFilterInternal(@NonNull HttpServletRequest request,@NonNull HttpServletResponse response,@NonNull FilterChain filterChain)

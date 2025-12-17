@@ -20,11 +20,13 @@ import com.System.DTOS.CourseDTO;
 import com.System.Entities.Course;
 import com.System.Service.CourseImpl;
 
+import jakarta.validation.constraints.NotNull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin(origins="http://localhost:4200",allowCredentials="true")
 public class CourseController {
 	@Autowired
 	CourseImpl courseImpl;
@@ -60,8 +62,10 @@ public class CourseController {
 	}
 	
 	@DeleteMapping("/deleteCourse/{title}")
+	@NotNull
 	public ResponseEntity<?> deleteCourse(@PathVariable("title") String title)
 	{
+		logger.info("request for deletion of course");
 		Optional<CourseDTO> course=Optional.ofNullable(courseImpl.getCourse(title));
 		if(course.isPresent() )
 		{

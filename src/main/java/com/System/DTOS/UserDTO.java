@@ -42,7 +42,7 @@ public class UserDTO {
 	@Override
 	public String toString() {
 		return "UserDTO [username=" + username + ", firstName=" + firstName + ", lastName=" + lastName + ", mobile="
-				+ mobile  + ", email=" + email + " password"+password+ "]";
+				+ mobile  + ", email=" + email + " password="+password+ "]";
 	}
 	public String getUsername() {
 		return username;
