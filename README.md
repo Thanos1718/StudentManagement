@@ -10,16 +10,18 @@ The **StudentManagement** project is a web application designed to manage studen
 - Student can navigate courses , add to cart functionality and purchase course.
 - Add, Update, Delete, and View Student Records
 - Course Registration for Students
-- Search functionality to find students and courses
+- Efficient Search functionality to find students and courses
 - Responsive UI built with Angular and TypeScript
 - RESTful APIs for backend services
 - Data persistence with PostgreSQL using JPA/Hibernate
+- Password reset using SMTP and JMS
 
 ## Tech Stack
 
 ### Frontend
 - **Angular** (with **TypeScript**): For building dynamic, responsive user interfaces
 - **HTML/CSS**: For structure and styling of the web pages
+- Navigation using routes and auth guards enabling role based access.
 - **Angular Material: For styling web page.
 - **TypeScript**: TypeScript for type-safe and structured frontend development
 
